@@ -1,0 +1,16 @@
+# Initialize Git repo
+git init
+
+# Connect to the remote repo you created on GitHub
+git remote add origin https://github.com/liyemaumd/conjoint-analysis-manager.git
+
+# Add all files
+git add .
+
+# Commit the files
+git commit -m "Initial commit - adding Conjoint Analysis Manager project"
+
+# Push the files to GitHub
+git branch -M main
+git push -u origin main
+

@@ -1,0 +1,10 @@
+{
+    "importance": [
+        {"attribute": "Rewards Type", "value": 40},
+        {"attribute": "Annual Fee", "value": 25},
+        {"attribute": "Signup Bonus", "value": 15},
+        {"attribute": "APR", "value": 10},
+        {"attribute": "Perks", "value": 5},
+        {"attribute": "Digital Features", "value": 5}
+    ]
+}
