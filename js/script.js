@@ -3,17 +3,17 @@ let attributes = [];
 function addAttributeRow() {
     const table = document.getElementById('attributesTable');
     const row = table.insertRow();
-    row.innerHTML = `<td><input type="text" placeholder="Attribute Name"></td>
-                     <td><input type="text" placeholder="Level1, Level2, Level3"></td>`;
+    row.innerHTML = `<td><input type="text" class="input-field" placeholder="Attribute Name"></td>
+                     <td><input type="text" class="input-field" placeholder="Level1, Level2, Level3"></td>`;
 }
 
 function proceedToAnalysis() {
     attributes = [];
     const rows = document.querySelectorAll('#attributesTable tr');
     for (let i = 1; i < rows.length; i++) {
-        const cells = rows[i].querySelectorAll('td input');
+        const cells = rows[i].querySelectorAll('input');
         attributes.push({
-            name: cells[0].value,
+            name: cells[0].value.trim(),
             levels: cells[1].value.split(',').map(level => level.trim())
         });
     }
@@ -23,12 +23,12 @@ function proceedToAnalysis() {
 function processResults() {
     const fileInput = document.getElementById('resultsFile');
     if (fileInput.files.length === 0) {
-        alert("Please upload the results file.");
+        alert("Please upload a results file.");
         return;
     }
 
     const reader = new FileReader();
-    reader.onload = (event) => {
+    reader.onload = function(event) {
         const data = JSON.parse(event.target.result);
         displayResults(data);
         generateRecommendations(data);
@@ -48,8 +48,8 @@ function displayResults(data) {
 function generateRecommendations(data) {
     const recommendations = [];
     const importantAttributes = data.importance.filter(attr => attr.value > 20);
-    recommendations.push(`Focus marketing messages on: ${importantAttributes.map(a => a.attribute).join(', ')}`);
-    recommendations.push('Recommended Price Point: $95 (based on similar analysis)');
+    recommendations.push(`Focus on: ${importantAttributes.map(a => a.attribute).join(', ')}`);
+    recommendations.push('Recommended Price Point: $95 (based on typical analysis)');
     recommendations.push('Target Segment: Urban professionals aged 25-45');
     recommendations.push('Emphasize rewards in marketing messaging.');
 
