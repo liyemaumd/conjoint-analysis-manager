@@ -1,57 +1,59 @@
 let attributes = [];
 
 function addAttributeRow() {
-    const table = document.getElementById('attributesTable');
+    const table = document.getElementById('attributesTable').getElementsByTagName('tbody')[0];
     const row = table.insertRow();
-    row.innerHTML = `<td><input type="text" class="input-field" placeholder="Attribute Name"></td>
-                     <td><input type="text" class="input-field" placeholder="Level1, Level2, Level3"></td>`;
+    row.innerHTML = `<td><input type="text" class="input-field"></td>
+                     <td><input type="text" class="input-field"></td>`;
 }
 
 function proceedToAnalysis() {
     attributes = [];
-    const rows = document.querySelectorAll('#attributesTable tr');
-    for (let i = 1; i < rows.length; i++) {
-        const cells = rows[i].querySelectorAll('input');
+    const rows = document.getElementById('attributesTable').getElementsByTagName('tbody')[0].rows;
+    for (let row of rows) {
+        const cells = row.getElementsByTagName('input');
         attributes.push({
-            name: cells[0].value.trim(),
-            levels: cells[1].value.split(',').map(level => level.trim())
+            name: cells[0].value,
+            levels: cells[1].value.split(',').map(l => l.trim())
         });
     }
     document.getElementById('analysisSection').style.display = 'block';
 }
 
 function processResults() {
-    const fileInput = document.getElementById('resultsFile');
-    if (fileInput.files.length === 0) {
-        alert("Please upload a results file.");
+    const file = document.getElementById('resultsFile').files[0];
+    if (!file) {
+        alert("Please upload results file.");
         return;
     }
 
     const reader = new FileReader();
-    reader.onload = function(event) {
-        const data = JSON.parse(event.target.result);
+    reader.onload = (e) => {
+        const data = JSON.parse(e.target.result);
         displayResults(data);
         generateRecommendations(data);
     };
-    reader.readAsText(fileInput.files[0]);
+    reader.readAsText(file);
 }
 
 function displayResults(data) {
-    let html = '<h3>Attribute Importance</h3><table><tr><th>Attribute</th><th>Importance (%)</th></tr>';
-    data.importance.forEach(attr => {
-        html += `<tr><td>${attr.attribute}</td><td>${attr.value}%</td></tr>`;
-    });
-    html += '</table>';
+    let html = '<h3>Attribute Importance</h3><table>';
+    html += '<thead><tr><th>Attribute</th><th>Importance (%)</th></tr></thead><tbody>';
+    for (let item of data.importance) {
+        html += `<tr><td>${item.attribute}</td><td>${item.value}</td></tr>`;
+    }
+    html += '</tbody></table>';
     document.getElementById('resultsDisplay').innerHTML = html;
 }
 
 function generateRecommendations(data) {
-    const recommendations = [];
-    const importantAttributes = data.importance.filter(attr => attr.value > 20);
-    recommendations.push(`Focus on: ${importantAttributes.map(a => a.attribute).join(', ')}`);
-    recommendations.push('Recommended Price Point: $95 (based on typical analysis)');
-    recommendations.push('Target Segment: Urban professionals aged 25-45');
-    recommendations.push('Emphasize rewards in marketing messaging.');
+    const important = data.importance.filter(item => item.value > 20);
+    const recommendations = [
+        `Focus marketing on: ${important.map(a => a.attribute).join(', ')}`,
+        "Recommended price point: $95",
+        "Target segment: Urban professionals (25-45)",
+        "Emphasize rewards in messaging."
+    ];
 
     document.getElementById('recommendationsDisplay').innerHTML = recommendations.map(r => `<p>${r}</p>`).join('');
     document.getElementById('recommendationsSection').style.display = 'block';

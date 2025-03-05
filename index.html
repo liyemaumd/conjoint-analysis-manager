@@ -6,19 +6,26 @@
 </head>
 <body>
 
-<div class="container">
+<header class="app-header">
     <h1>Conjoint Analysis Manager</h1>
+</header>
 
+<div class="container">
     <div class="card">
         <h2>Step 1: Specify Attributes & Levels</h2>
         <label>Product Name:</label>
-        <input type="text" id="productName" class="input-field" placeholder="Product Name">
+        <input type="text" id="productName" class="input-field" placeholder="Enter product name">
 
         <table id="attributesTable">
-            <tr><th>Attribute Name</th><th>Levels (comma-separated)</th></tr>
+            <thead>
+                <tr><th>Attribute Name</th><th>Levels (comma-separated)</th></tr>
+            </thead>
+            <tbody></tbody>
         </table>
-        <button class="btn" onclick="addAttributeRow()">+ Add Attribute</button>
-        <button class="btn primary" onclick="proceedToAnalysis()">Next: Upload Analysis Results</button>
+        <div class="button-group">
+            <button class="btn secondary" onclick="addAttributeRow()">+ Add Attribute</button>
+            <button class="btn primary" onclick="proceedToAnalysis()">Next: Upload Results</button>
+        </div>
     </div>
 
     <div class="card" id="analysisSection" style="display:none;">
